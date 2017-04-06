@@ -1,0 +1,17 @@
+USE `ci6206`;
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE `event_comments`;
+TRUNCATE `event_attendees`;
+TRUNCATE `event`;
+TRUNCATE `movie_user_reviews`;
+TRUNCATE `movie_user_likes`;
+TRUNCATE `movie_screenings`;
+TRUNCATE `movie_genre`;
+TRUNCATE `user_messages`;
+TRUNCATE `user_genre_likes`;
+TRUNCATE `user_friends`;
+TRUNCATE `theatre`;
+TRUNCATE `genre`;
+TRUNCATE `movie`;
+TRUNCATE `user`;
+SET FOREIGN_KEY_CHECKS=1;

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN">
+
+	<Appenders>
+		<RollingFile name="LogFile" fileName="logs/moviebook.log"
+			filePattern="logs/moviebook-%i.log">
+			<PatternLayout pattern="[%d{DEFAULT}] %-5level [%logger{36}]:: %msg%n" charset="UTF-8" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy fileIndex="max" max="10" />
+		</RollingFile>
+
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36}:: %msg%n" />
+		</Console>
+
+
+	</Appenders>
+
+
+
+	<Loggers>
+		<Root level="DEBUG">
+			<AppenderRef ref="LogFile" />
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+
+</Configuration>

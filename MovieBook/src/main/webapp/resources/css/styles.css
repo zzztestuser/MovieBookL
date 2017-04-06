@@ -1,0 +1,32 @@
+@CHARSET "ISO-8859-1";
+
+div.logger {
+	color: red;
+}
+
+.userDetails {
+	vertical-align: middle;
+	font-size: large;
+	float: left;
+}
+
+.userDisplayPic {
+	height: 50px;
+	width: 50px;
+	float: left;
+	margin-left: 10px;
+	margin-right: 10px; 
+}
+
+button {
+	text-align: center;
+	padding: 10px;
+	border: 1px solid #CCC;
+	background-color: #DDD;
+	cursor: pointer;
+	min-width: 100px;
+}
+
+.button:active {
+	font-weight: bold;
+}
