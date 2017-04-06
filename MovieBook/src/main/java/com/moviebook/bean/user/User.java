@@ -1,10 +1,10 @@
-package com.moviebook.user;
+package com.moviebook.bean.user;
 
 import java.time.LocalDateTime;
 
 import com.google.gson.Gson;
 
-public class User {
+public class User implements UserBeanFull, UserBeanLight {
 
 	// Password is not retrieved
 
@@ -29,6 +29,7 @@ public class User {
 		this.modificationDateTime = modificationDateTime;
 	}
 
+	@Override
 	public int getId() {
 		return id;
 	}
@@ -37,6 +38,7 @@ public class User {
 		this.id = id;
 	}
 
+	@Override
 	public String getEmail() {
 		return email;
 	}
@@ -45,6 +47,7 @@ public class User {
 		this.email = email;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -53,6 +56,7 @@ public class User {
 		this.name = name;
 	}
 
+	@Override
 	public String getProfilePhotoPath() {
 		return profilePhotoPath;
 	}
@@ -75,10 +79,6 @@ public class User {
 
 	public void setModificationDateTime(LocalDateTime modificationDateTime) {
 		this.modificationDateTime = modificationDateTime;
-	}
-
-	public String toJson() {
-		return (new Gson()).toJson(this);
 	}
 
 }
