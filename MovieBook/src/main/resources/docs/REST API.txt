@@ -1,0 +1,20 @@
+
+/api/session
+
+- GET 		Retrieve current logged in user info 
+	200		Success, returns logged in user info as UserBeanFull
+	401		No currently logged in user
+
+- POST		Attempts to sign in with user
+	
+	Params:
+		username		Username
+		password		Password
+	
+	200		Success, returns logged in user info as UserBeanFull
+	401		Invalid login. Could be invalid username / password / SQL Exception
+	409		Currently logged in user does not match new user attempting to log in		 
+	
+
+- DELETE	Log out of current session
+	200		Log out successful. 

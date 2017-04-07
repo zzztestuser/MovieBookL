@@ -27,6 +27,6 @@ button {
 	min-width: 100px;
 }
 
-.button:active {
+button:active {
 	font-weight: bold;
 }

@@ -1,4 +1,4 @@
-<%@ page import="com.moviebook.user.User"%>
+<%@ page import="com.moviebook.bean.user.UserBean"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -31,19 +31,22 @@
 			</tr>
 		</table>
 	</form>
-	<div class="loginInfo" style="display: none; float: clear;">
+	<div class="loginInfo" style="display: none; clear: both">
 		<img src="" alt="Profile picture" class="userDisplayPic" />
 		<p class="userDetails"></p>
-		<button class="logout" style="float: right;" >Logout</button>
+		<button class="logout" style="float: right;">Logout</button>
 	</div>
-	<div class="logger"></div>
+
+	<div class="friendsList" style="clear: both; display: none">
+		<h1>Friends</h1>
+	</div>
 
 	<!-- Hidden fields -->
 	<%
 		if (session.getAttribute("currentUserBean") != null) {
 	%>
 	<div id="currentUser" style="display: none;">
-		<%=((User) session.getAttribute("currentUserBean")).toJson()%>
+		<%=((UserBean) session.getAttribute("currentUserBean")).toJson()%>
 	</div>
 	<%
 		}
