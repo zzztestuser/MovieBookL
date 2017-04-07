@@ -2,7 +2,9 @@ package com.moviebook.bean.user;
 
 import java.time.LocalDateTime;
 
-public class UserBean {
+import com.moviebook.bean.JsonBean;
+
+public class UserBean extends JsonBean {
 
 	// Password is not retrieved
 
