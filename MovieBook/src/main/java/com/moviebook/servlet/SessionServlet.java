@@ -103,9 +103,10 @@ public class SessionServlet extends HttpServlet {
 				UserBean userDetails = UserManager.getUserByEmail(user);
 
 				request.getSession().setAttribute("currentUserBean", userDetails);
-
+				
+				log.info("Returning response!");
 				returnJson(response, userDetails);
-				return;
+				
 
 			} else {
 				log.info("User " + user + " failed to authenicate.");

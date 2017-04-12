@@ -16,6 +16,12 @@
   	<description>HTTPServlet handling RESTful calls for user entities</description>
   	<servlet-class>com.moviebook.servlet.UserServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>RecommendedMoviesServlet</servlet-name>
+  	<display-name>RecommendedMoviesServlet</display-name>
+  	<description></description>
+  	<servlet-class>com.moviebook.servlet.RecommendedMoviesServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
   	<url-pattern>/api/session</url-pattern>
@@ -23,5 +29,9 @@
   <servlet-mapping>
   	<servlet-name>UserServlet</servlet-name>
   	<url-pattern>/api/users/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>RecommendedMoviesServlet</servlet-name>
+  	<url-pattern>/api/movies/recommended</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -82,9 +82,11 @@ function loginAction() {
 
 	}).done(function(userJson) {
 
-		movieBook.currentUser = userJson;
-		initLoggedIn();
+		// movieBook.currentUser = userJson;
+		// initLoggedIn();
 
+		window.location.href="index.jsp";
+		
 	});
 
 };
