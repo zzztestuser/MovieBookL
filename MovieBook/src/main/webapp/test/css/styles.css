@@ -20,7 +20,7 @@ div.logger {
 
 button {
 	text-align: center;
-	padding: 10px;
+	padding: 5px 10px 5px 10px;
 	border: 1px solid #CCC;
 	background-color: #DDD;
 	cursor: pointer;
@@ -29,4 +29,9 @@ button {
 
 button:active {
 	font-weight: bold;
+}
+
+table.searchResultsTable, td.searchResultDetail {
+	border: 1px solid gray;
+	border-collapse: collapse;
 }

@@ -19,6 +19,13 @@ public class RecommendationsManager {
 
 	private static final Logger log = LogManager.getLogger(RecommendationsManager.class);
 
+	/**
+	 * Note MovieBean object does not include screening locations
+	 * 
+	 * @param userID
+	 * @return
+	 * @throws SQLException
+	 */
 	public static List<MovieBean> getRecommendedMovies(int userID) throws SQLException {
 
 		log.debug("Retrieving recommended movies for ID " + userID);
@@ -31,7 +38,7 @@ public class RecommendationsManager {
 
 		try (Connection conn = DatabaseHelper.getDbConnection()) {
 
-			try (PreparedStatement stmt = conn.prepareStatement(sqlRecommendedMovies); PreparedStatement stmt2 = conn.prepareStatement(sqlGetGenres)) {
+			try (PreparedStatement stmt = conn.prepareStatement(sqlRecommendedMovies)) {
 
 				stmt.setInt(1, userID);
 				try (ResultSet rs = stmt.executeQuery()) {
@@ -49,16 +56,7 @@ public class RecommendationsManager {
 						mv.setPosterMediumPath(StringUtils.trim(rs.getString("posterMediumPath")));
 						mv.setPosterLargePath(StringUtils.trim(rs.getString("posterLargePath")));
 
-						stmt2.setInt(1, mv.getId());
-						try (ResultSet rs2 = stmt2.executeQuery()) {
-							ArrayList<String> mvGenres = new ArrayList<>();
-							while (rs2.next()) {
-								mvGenres.add(StringUtils.trim(rs2.getString("name")));
-							}
-
-							mv.setGenre(mvGenres);
-
-						}
+						mv.setGenre(GenreManager.getGenreNamesForMovie(mv.getId()));
 
 						mvList.add(mv);
 					}

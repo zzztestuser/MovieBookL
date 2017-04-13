@@ -27,6 +27,12 @@
   	<description></description>
   	<servlet-class>com.moviebook.servlet.MoviesRecommendedFriendsServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>MoviesSearchServlet</servlet-name>
+  	<display-name>MoviesSearchServlet</display-name>
+  	<description></description>
+  	<servlet-class>com.moviebook.servlet.MoviesSearchServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
   	<url-pattern>/api/session</url-pattern>
@@ -42,5 +48,9 @@
   <servlet-mapping>
   	<servlet-name>MoviesRecommendedFriendsServlet</servlet-name>
   	<url-pattern>/api/movies/recommended/friends</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MoviesSearchServlet</servlet-name>
+  	<url-pattern>/api/movies/search</url-pattern>
   </servlet-mapping>
 </web-app>

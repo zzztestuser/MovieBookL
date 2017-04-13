@@ -30,6 +30,7 @@ function initLoggedOut() {
 	$("form#loginForm").show();
 	$("div.loginInfo").hide();
 	$("div.recommendMoviesList").hide();
+	$("div.movieSearch").hide();
 
 }
 
@@ -38,6 +39,8 @@ function initLoggedIn() {
 	updateUserDetails();
 	updateUserFriends();
 	updateRecommendedMovies();
+
+	$("div.movieSearch").show();
 
 }
 
@@ -56,6 +59,7 @@ function updateRecommendedMovies() {
 			function(movies) {
 
 				var recElement = $("div.recommendMoviesList");
+				recElement.empty();
 
 				$.each(movies, function(key, movie) {
 					// Build the <div> object to house this
@@ -149,6 +153,7 @@ function updateUserFriends() {
 
 	}).done(function(friendsList) {
 		var friendsListDiv = $("div.friendsList");
+		friendsListDiv.empty();
 		var table = $("<table></table>");
 		for ( var i in friendsList) {
 
@@ -165,5 +170,73 @@ function updateUserFriends() {
 		friendsListDiv.append(table);
 		friendsListDiv.show();
 	});
+
+}
+
+function movieSearchAction() {
+
+	var searchTerms = {
+		"title" : $("input[name='movieSearch']").val()
+	};
+
+	$
+			.ajax({
+				url : "api/movies/search",
+
+				type : "GET",
+
+				data : searchTerms,
+
+				dataType : "json",
+
+				cache : false,
+				
+				statusCode: {
+					404: function() {
+						// No results found
+						$(".searchResultsTable").hide();
+						$(".searchResultsTable").after($("<div>").addClass("noResultsFound").css("color", "red").text("No results found"));
+					}
+				}
+
+			})
+			.done(
+					function(results) {
+
+						// Remove results not found if any
+						if ($(".searchResults > .noResultsFound").length) $(".searchResults > .noResultsFound").remove(); 
+						
+						
+						// Some results found
+						var resultRow = $(".searchResultsTable .searchResultsRow:first-child");
+						resultRow.detach();
+						var table = $(".searchResultsTable");
+						table.hide();
+						table.empty();
+
+						$.each(results,
+								function(index, movie) {
+
+
+									var newRow = resultRow.clone();
+									newRow.find(".searchResultTitle").text(
+											movie.title);
+
+									newRow.find(".searchResultGenres").text(
+											$(movie.genre).map(function() {
+												return (this);
+											}).get().join(", ")).css(
+											"font-style", "italic");
+
+									newRow.find(".searchResultDescription")
+											.text(movie.description);
+
+									$(".searchResultsTable").append(newRow);
+
+								})
+
+						table.show();
+
+					});
 
 }
