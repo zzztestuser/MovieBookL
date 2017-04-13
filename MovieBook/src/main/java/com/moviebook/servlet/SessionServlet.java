@@ -131,6 +131,7 @@ public class SessionServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().write(gs.toJson(user));
+		log.debug("JSON output for user");
 		log.debug(gs.toJson(user));
 
 	}

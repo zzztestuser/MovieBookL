@@ -29,6 +29,7 @@ function initLoggedOut() {
 	// Show login form
 	$("form#loginForm").show();
 	$("div.loginInfo").hide();
+	$("div.recommendMoviesList").hide();
 
 }
 
@@ -36,7 +37,40 @@ function initLoggedIn() {
 
 	updateUserDetails();
 	updateUserFriends();
+	updateRecommendedMovies();
 
+}
+
+function updateRecommendedMovies() {
+	$.ajax({
+
+		url : "api/movies/recommended",
+
+		type : "GET",
+
+		dataType : "json",
+
+		cache : false,
+
+	}).done(
+			function(movies) {
+
+				var recElement = $("div.recommendMoviesList");
+
+				$.each(movies, function(key, movie) {
+					// Build the <div> object to house this
+					var newMovie = $("<table>");
+					var movieRow = newMovie.append($("<tr>"));
+					movieRow.append($("<td>").text("Title").css(
+							"font-weight", "bold"));
+					movieRow.append($("<td>").text(movie.title));
+
+					recElement.append(newMovie);
+				})
+				
+				recElement.show();
+				
+			});
 }
 
 function attachEventHandlers() {
@@ -82,11 +116,9 @@ function loginAction() {
 
 	}).done(function(userJson) {
 
-		// movieBook.currentUser = userJson;
-		// initLoggedIn();
+		movieBook.currentUser = userJson;
+		initLoggedIn();
 
-		window.location.href="index.jsp";
-		
 	});
 
 };

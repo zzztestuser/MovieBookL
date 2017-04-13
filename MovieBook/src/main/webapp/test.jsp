@@ -41,6 +41,10 @@
 		<h1>Friends</h1>
 	</div>
 
+	<div class="recommendMoviesList" style="clear: both; display: none">
+		<h1>Recommended Movies</h1>
+	</div>
+
 	<!-- Hidden fields -->
 	<%
 		if (session.getAttribute("currentUserBean") != null) {

@@ -101,8 +101,7 @@
               </div>
             </div>
             <div class="simform__actions">
-              <a href style="background-color: red" onclick="loginAction()">Test Login</a>
-              <button class="sumbit" id="loginButton" onclick="loginAction()" value="Log In">Log In</button>  
+              <button class="sumbit" type="button" id="loginButton" onclick="loginAction()" value="Log In">Log In</button>  
               <span class="simform__actions-sidetext"><a class="special" role="link" href="#">Forgot your password?<br>Click here</a></span>
             </div> 
           </form>          
