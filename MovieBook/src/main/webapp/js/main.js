@@ -58,20 +58,19 @@
  $("button.logout").click(logoutAction);
  }
 
-
+ */
  function logoutAction() {
  // Destroy everything and force a reload of page
  movieBook = {};
  $.ajax({
- url : "api/session",
- type : "DELETE",
- cache : false,
+	 url : "api/session",
+	 type : "DELETE",
+	 cache : false,
  }).done(function() {
- alert('Log out called?');
- window.location.href = "index.jsp";
+	 window.location.href = "login.jsp";
  });
  }
- */
+
 function loginAction() {
 
 	var loginData = {
@@ -87,7 +86,6 @@ function loginAction() {
 		cache : false,
 
 	}).done(function(userDetails) {
-		alert('Entry');
 		window.location.href = 'index.jsp'
 	})
 

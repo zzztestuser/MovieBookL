@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.moviebook.bean.user.UserBean"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="com.moviebook.bean.UserBean"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Home</title>
+<title>MovieBook Home</title>
 <meta charset="utf-8">
 <meta name = "format-detection" content = "telephone=no" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,9 +13,11 @@
 <link rel="stylesheet" href="css/camera.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/font-awesome-min-moviebook.css">
+
 <script src="js/jquery.js"></script>
 <script src="js/jquery-migrate-1.1.1.js"></script>
 <script src="js/jquery.easing.1.3.js"></script>
+<script src="js/main.js"></script>
 <script src="js/script.js"></script>
 <script src="js/superfish.js"></script>
 <script src="js/jquery.equalheights.js"></script>
@@ -24,9 +26,11 @@
 <script src="js/jquery.ui.totop.js"></script>
 <script src="js/touchTouch.jquery.js"></script>
 <script src="js/camera.js"></script>
+
 <!--[if (gt IE 9)|!(IE)]><!-->
 <script src="js/jquery.mobile.customized.min.js"></script>
 <!--<![endif]-->
+
 <script>
  $(window).load(function(){
   $().UItoTop({ easingType: 'easeOutQuart' });
@@ -53,11 +57,13 @@
      //}
  //});
  } );
+ 
 </script>
+
 
 <style>
 #bg {
-  position: fixed; 
+  position: fixed; jsp 
   top: -50%; 
   left: -50%; 
   width: 200%; 
@@ -222,9 +228,9 @@
   <img src="images/background-page.jpg" alt="">
 </div>
 <div class="loginInfo">
-		<img src="" alt="Profile picture" class="userDisplayPic" />
-		<p class="userDetails">User Details</p>		
-	</div>
+	<img src="" alt="Profile picture" class="userDisplayPic" />
+	<p class="userDetails">User Details</p>		
+</div>
 <!--==============================
               header
 =================================-->
@@ -238,11 +244,32 @@
         <tr>
           <td width="378" height="28"></td>          
           <td width="46">search:</td>
-          <td width="189"><form name="form1" method="post" action="">
-            <label for="search"></label>
-            <input type="text" name="search" id="search">
-          </form></td>
-          <td width="60"><button type="button" id="logoutButton" onclick="logoutAction()">Logout</button></td>
+          <td width="189">
+          	<form name="form1" method="post" action="">
+	            <label for="search"></label>
+	            <input type="text" name="search" id="search">
+         	</form>
+         </td>
+          <td>
+          <img height="60" width="60" src="<%=((UserBean) session.getAttribute("currentUserBean")).getProfilePhotoPath()%>" alt="Profile picture" class="userDisplayPic" /> 
+		  <!-- To provide user initials! -->
+			<%
+				if (session.getAttribute("currentUserBean") != null) {
+			%>
+			<div id="currentUser"> Welcome 
+				<%= ((UserBean) session.getAttribute("currentUserBean")).getName() %>!
+			</div>
+			<%
+				}			
+			%>
+		  </td>
+	         
+        </tr>
+        <tr>
+          <td width="378" height="28"></td>          
+          <td width="46"></td>
+          <td width="189"></td>
+         <td width="60"><button type="button" id="logoutButton" onclick="logoutAction()">Logout</button></td>
         </tr>
       </table>
     </div>
@@ -293,25 +320,49 @@
     <div class="grid_12">
  <h3 style='color:#FF00FF'>Recommendations for you:</h3>
  <br>
+ 
 </div></div></div>
- <br>
- <br>
-  <div class="container_12">
-    <div class="grid_12">    
+<br>
+<br>
+<div class="container_12">
+<div class="grid_12">    
+
+<div id="movie1"></div>
+<script>
+	//document.getElementById('movie1').innerHTML = 'You are not authorized to use MovieBook.'; 
+	var table = document.createElement('table');
+	table.setAttribute('border','1');
+	table.setAttribute('width','100%')
+	var row = table.insertRow(0);
+	for(j=1; j<=10; j++){
+	    var text = document.createTextNode(String.fromCharCode(j+64));
+	    var cell = row.insertCell(j-1);
+	    cell.setAttribute('align','center')
+	    cell.appendChild(text);
+	}
+	document.getElementById("movie1").appendChild(table);
+</script>
+
+	
 <!--<a href="#none" onclick="window.open('invite.html','popup', 'width=600, height=500, scrollbars=auto'); return false;">	<img src="images/Divergent_M.jpg" id="diver1" alt="" class="fleft"></a>-->
 <table border="1">
-	<tr>
-	<td rowspan=4>
-        <img src="images/Divergent_M.jpg" id="diver1" alt="" class="fleft">
-        </td>
-        <td><h2>Divergent</h2></td>
-        </tr>
-        <tr><td>PG13 | 2h 19min | Adventure, Mystery, Sci-Fi</td>
+<tr>
+	
 </tr>
+<!-- <tr>
+<td rowspan=4>
+       <img src="images/Divergent_M.jpg" id="diver1" alt="" class="fleft">
+       </td>
+       <td><h2>Divergent</h2></td>
+       </tr>
+       <tr><td>PG13 | 2h 19min | Adventure, Mystery, Sci-Fi</td>
+</tr> 
 <tr><td>Director: Neil Burger; Writer: Evan Daugherty, Vanessa Taylor, Veronica Roth; Stars: Shailene Woodley, Theo James, Ashley Judd<br>
 In a world divided by factions based on virtues, Tris learns she's Divergent and won't fit in. When she discovers a plot to destroy Divergents, Tris and the mysterious Four must find out what makes Divergents dangerous before it's too late.</td></tr>
+-->
 <tr>
 <td>
+
     F1, F2, F3
     </td>
 </tr>  

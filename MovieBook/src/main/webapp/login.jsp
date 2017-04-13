@@ -1,4 +1,4 @@
-<%@ page import="com.moviebook.bean.user.UserBean"%>
+<%@ page import="com.moviebook.bean.UserBean"%>
 <!DOCTYPE html>
 <html>
 <head>
