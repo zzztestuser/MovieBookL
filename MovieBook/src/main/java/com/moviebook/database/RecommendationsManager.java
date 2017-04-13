@@ -11,8 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.moviebook.bean.FriendBean;
+import com.moviebook.bean.FriendBean.InviteStatus;
 import com.moviebook.bean.MovieBean;
-import com.moviebook.bean.UserBean;
 
 public class RecommendationsManager {
 
@@ -72,8 +73,56 @@ public class RecommendationsManager {
 
 	}
 
-	public static List<UserBean> getInterestedFriends(int userID, int movieID) {
-		return null;
+	/**
+	 * Returns all friends who are interested in a movie {@code movieID} for user {@code userID} with invite status {@code inviteStatus}
+	 * 
+	 * @param userID
+	 * @param movieID
+	 * @param inviteStatus
+	 * @return
+	 * @throws SQLException
+	 */
+	public static List<FriendBean> getInterestedFriends(int userID, int movieID, InviteStatus inviteStatus) throws SQLException {
+		log.debug("Retrieving interested friends (invite status " + inviteStatus + ") for user ID " + userID + " for movie " + movieID);
+		final String sql = "SELECT `u`.`id`, `u`.`email`, `u`.`name`, `u`.`profilePhotoPath`, `u`.`creationDateTime`, `u`.`modificationDateTime`, `uf`.`inviteStatus` "
+				+ "FROM `user` `u`, `user_friends` `uf`, `vw_user_recommended_movies` `rm` "
+				+ "WHERE (`uf`.`userID` = ?) AND (`u`.`id` = `uf`.`friendID`) AND (`uf`.`inviteStatus` = ?)"
+				+ " AND (`rm`.`userID` = `uf`.`friendID`) AND (`rm`.`movieID` = ?) ORDER BY `name` ASC;";
+
+		ArrayList<FriendBean> friendList = new ArrayList<>();
+
+		try (Connection conn = DatabaseHelper.getDbConnection()) {
+
+			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+				stmt.setInt(1, userID);
+				stmt.setInt(2, inviteStatus.code());
+				stmt.setInt(3, movieID);
+
+				try (ResultSet rs = stmt.executeQuery()) {
+
+					while (rs.next()) {
+						FriendBean result = new FriendBean();
+						result.setId(rs.getInt("id"));
+						result.setEmail(StringUtils.trim(rs.getString("email")));
+						result.setName(StringUtils.trim(rs.getString("name")));
+						result.setProfilePhotoPath((StringUtils.trim(rs.getString("profilePhotoPath"))));
+						result.setCreationDateTime(rs.getTimestamp("creationDateTime").toLocalDateTime());
+						result.setModificationDateTime(rs.getTimestamp("modificationDateTime").toLocalDateTime());
+						result.setStatus(InviteStatus.valueOf(rs.getInt("inviteStatus")));
+
+						log.info("Friend " + result.getId() + " of user " + userID + " is interested in movie " + movieID);
+
+						friendList.add(result);
+					}
+
+				}
+
+			}
+
+		}
+
+		return (friendList.isEmpty()) ? null : friendList;
 	}
-	
+
 }

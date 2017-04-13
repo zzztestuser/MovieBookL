@@ -22,10 +22,10 @@
   	<servlet-class>com.moviebook.servlet.RecommendedMoviesServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>MovieInterestedFriendsServlet</servlet-name>
-  	<display-name>MovieInterestedFriendsServlet</display-name>
+  	<servlet-name>MoviesRecommendedFriendsServlet</servlet-name>
+  	<display-name>MoviesRecommendedFriendsServlet</display-name>
   	<description></description>
-  	<servlet-class>com.moviebook.servlet.MovieInterestedFriendsServlet</servlet-class>
+  	<servlet-class>com.moviebook.servlet.MoviesRecommendedFriendsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
@@ -40,7 +40,7 @@
   	<url-pattern>/api/movies/recommended</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>MovieInterestedFriendsServlet</servlet-name>
-  	<url-pattern>/api/movies/interested/friends</url-pattern>
+  	<servlet-name>MoviesRecommendedFriendsServlet</servlet-name>
+  	<url-pattern>/api/movies/recommended/friends</url-pattern>
   </servlet-mapping>
 </web-app>
