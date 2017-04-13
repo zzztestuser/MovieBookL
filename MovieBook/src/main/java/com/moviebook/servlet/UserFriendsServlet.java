@@ -14,32 +14,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
-import com.moviebook.bean.MovieBean;
+import com.moviebook.bean.FriendBean;
+import com.moviebook.bean.FriendBean.InviteStatus;
 import com.moviebook.bean.UserBean;
-import com.moviebook.database.RecommendationsManager;
+import com.moviebook.database.FriendsManager;
 
 /**
- * Servlet implementation class RecommendedMoviesServlet
+ * Servlet implementation class UserServlet
  */
-public class RecommendedMoviesServlet extends HttpServlet {
-
-	private static final Logger log = LogManager.getLogger(RecommendedMoviesServlet.class);
+public class UserFriendsServlet extends HttpServlet {
+	private static final Logger log = LogManager.getLogger(UserFriendsServlet.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public RecommendedMoviesServlet() {
+	public UserFriendsServlet() {
 		super();
 	}
 
 	/**
-	 * Retrives the list of recommended movies Supports one parameter user=<id>
-	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// Check authentication
+
 		if ((request.getSession(false) == null) || (request.getSession(false).getAttribute("currentUserBean") == null)) {
 			response.setContentType("text/plain");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -58,6 +57,7 @@ public class RecommendedMoviesServlet extends HttpServlet {
 			// TODO Implement support for semicomma delimited multiple user ids
 			try {
 				user = Integer.parseInt(StringUtils.trim(request.getParameter("user")));
+				log.debug("User ID from passed parameter: " + user);
 			} catch (NumberFormatException e) {
 				log.error("Invalid userID passed", e);
 				// Invalid ID, return
@@ -68,39 +68,57 @@ public class RecommendedMoviesServlet extends HttpServlet {
 			}
 		}
 
+		// Check for presence of status parameter
+		String inviteStatus = StringUtils.trim(request.getParameter("inviteStatus"));
+		inviteStatus = StringUtils.isEmpty(inviteStatus) ? "all" : inviteStatus.toLowerCase();
+
+		log.info("Retrieving friends for user " + user + " for invite status " + inviteStatus);
+
 		try {
-			log.info("Retrieving recommended movies for user " + user);
-			List<MovieBean> rcMovies = RecommendationsManager.getRecommendedMovies(user);
-			if ((rcMovies == null) || (rcMovies.isEmpty())) {
-				log.info("No recommended movies for user " + user);
+			List<FriendBean> results;
+			if (inviteStatus.equals("all")) {
+				results = FriendsManager.getUserFriendsByIdAll(user);
+			} else if (inviteStatus.equals("accepted")) {
+				results = FriendsManager.getUserFriendsById(user, InviteStatus.ACCEPTED);
+			} else if (inviteStatus.equals("sent")) {
+				results = FriendsManager.getUserFriendsById(user, InviteStatus.SENT);
+			} else if (inviteStatus.equals("rejected")) {
+				results = FriendsManager.getUserFriendsById(user, InviteStatus.REJECTED);
+			} else {
+				// Bad invite status, throw exception
+				log.error("Invalid status when retrieving friend: " + inviteStatus);
+				response.setCharacterEncoding("UTF-8");
+				response.setContentType("text/plain");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().write("Invalid status when retrieving friend: " + inviteStatus);
+				return;
+			}
+
+			if ((results == null) || (results.isEmpty())) {
+				// No friends found!
+				log.info("No friends for user " + user);
 				response.setCharacterEncoding("UTF-8");
 				response.setContentType("text/plain");
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-			} else {
-				log.info(rcMovies.size() + " recommended movies for user " + user);
-				returnJson(response, rcMovies);
-			}
 
+			} else {
+				log.info(results.size() + " friends for user " + user);
+
+				Gson gs = new Gson();
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.setStatus(HttpServletResponse.SC_OK);
+				response.getWriter().write(gs.toJson(results));
+				log.debug(gs.toJson(results));
+				return;
+			}
 		} catch (SQLException e) {
-			log.error("Exception encountered retrieving recommended movies for user " + user, e);
+			log.error("Exception encountered retrieving friends for user " + user, e);
 			response.setContentType("text/plain");
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().write("Exception encountered retrieving recommended movies for user " + user);
+			response.getWriter().write("Exception encountered retrieving friends for user " + user);
 			return;
 		}
-
-	}
-
-	private void returnJson(HttpServletResponse response, List<MovieBean> movies) throws IOException {
-
-		Gson gs = new Gson();
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.setStatus(HttpServletResponse.SC_OK);
-		response.getWriter().write(gs.toJson(movies));
-		log.debug("JSON output for movies:");
-		log.debug(gs.toJson(movies));
-
 	}
 
 }

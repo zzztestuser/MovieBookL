@@ -11,7 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.moviebook.bean.user.MovieBean;
+import com.moviebook.bean.MovieBean;
+import com.moviebook.bean.UserBean;
 
 public class RecommendationsManager {
 
@@ -71,5 +72,8 @@ public class RecommendationsManager {
 
 	}
 
+	public static List<UserBean> getInterestedFriends(int userID, int movieID) {
+		return null;
+	}
 	
 }

@@ -14,9 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
-import com.moviebook.bean.user.UserBean;
+import com.moviebook.bean.UserBean;
 import com.moviebook.database.InvalidUserException;
-import com.moviebook.database.UserManager;
+import com.moviebook.database.UsersManager;
 
 /**
  * Servlet implementation class UserLoginServlet
@@ -97,10 +97,10 @@ public class SessionServlet extends HttpServlet {
 		}
 
 		try {
-			if (UserManager.isUserValid(user, password)) {
+			if (UsersManager.isUserValid(user, password)) {
 				log.info("User " + user + " successfully authenicated.");
 
-				UserBean userDetails = UserManager.getUserByEmail(user);
+				UserBean userDetails = UsersManager.getUserByEmail(user);
 
 				request.getSession().setAttribute("currentUserBean", userDetails);
 				

@@ -61,15 +61,15 @@ function updateRecommendedMovies() {
 					// Build the <div> object to house this
 					var newMovie = $("<table>");
 					var movieRow = newMovie.append($("<tr>"));
-					movieRow.append($("<td>").text("Title").css(
-							"font-weight", "bold"));
+					movieRow.append($("<td>").text("Title").css("font-weight",
+							"bold"));
 					movieRow.append($("<td>").text(movie.title));
 
 					recElement.append(newMovie);
 				})
-				
+
 				recElement.show();
-				
+
 			});
 }
 
@@ -98,8 +98,8 @@ function logoutAction() {
 function loginAction() {
 
 	var loginData = {
-		'username' : $("input[name='loginUserName']").val(),
-		'password' : $("input[name='loginPassword']").val()
+		"username" : $("input[name='loginUserName']").val(),
+		"password" : $("input[name='loginPassword']").val()
 	};
 
 	$.ajax({
@@ -138,7 +138,11 @@ function updateUserFriends() {
 	var user = movieBook.currentUser;
 
 	$.ajax({
-		url : "api/users/" + user.id + "/friends",
+		url : "api/users/friends",
+		data : {
+			"user" : user.id,
+			"inviteStatus" : "accepted"
+		},
 		type : "GET",
 		dataType : "json",
 		cache : false,
@@ -153,6 +157,8 @@ function updateUserFriends() {
 			tr.append($("<td>" + friendsList[i].name + "</td>"));
 			tr.append($("<td>Email</td>").css("font-weight", "bold"));
 			tr.append($("<td>" + friendsList[i].email + "</td>"));
+			tr.append($("<td>Invite status</td>").css("font-weight", "bold"));
+			tr.append($("<td>" + friendsList[i].status + "</td>"));
 			table.append(tr);
 
 		}

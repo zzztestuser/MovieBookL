@@ -1,4 +1,4 @@
-package com.moviebook.bean.user;
+package com.moviebook.bean;
 
 import java.util.List;
 

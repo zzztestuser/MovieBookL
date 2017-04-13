@@ -11,7 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.moviebook.bean.user.UserBean;
+import com.moviebook.bean.FriendBean;
+import com.moviebook.bean.FriendBean.InviteStatus;
+import com.moviebook.bean.UserBean;
 
 /**
  * Database manager class for handling {@code USER} table in database
@@ -19,9 +21,9 @@ import com.moviebook.bean.user.UserBean;
  * @author Lua Choon Ngee
  *
  */
-public class UserManager {
+public class UsersManager {
 
-	private static final Logger log = LogManager.getLogger(UserManager.class);
+	private static final Logger log = LogManager.getLogger(UsersManager.class);
 
 	/**
 	 * Returns if there is an exact match in the database for the user ID and password. Please use the hashed password if relevant
@@ -168,50 +170,9 @@ public class UserManager {
 
 			}
 		}
-		
+
 		return false;
 	}
 
-	public static List<UserBean> getUserFriendsById(int id) throws SQLException {
 
-		log.debug("Retrieving friends for ID " + id);
-
-		final String sql = "SELECT `u`.`id`, `u`.`email`, `u`.`name`, `u`.`profilePhotoPath`, `u`.`creationDateTime`, `u`.`modificationDateTime`"
-				+ " FROM `user` `u`, `user_friends` `uf` WHERE (`uf`.`userID` = ?) AND (`u`.`id` = `uf`.`friendID`) ORDER BY `name` ASC";
-
-		ArrayList<UserBean> resultList = new ArrayList<>();
-
-		try (Connection conn = DatabaseHelper.getDbConnection()) {
-
-			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-				stmt.setInt(1, id);
-
-				try (ResultSet rs = stmt.executeQuery()) {
-
-					while (rs.next()) {
-						UserBean result = new UserBean();
-						result.setId(rs.getInt("id"));
-						result.setEmail(StringUtils.trim(rs.getString("email")));
-						result.setName(StringUtils.trim(rs.getString("name")));
-						result.setProfilePhotoPath((StringUtils.trim(rs.getString("profilePhotoPath"))));
-						result.setCreationDateTime(rs.getTimestamp("creationDateTime").toLocalDateTime());
-						result.setModificationDateTime(rs.getTimestamp("modificationDateTime").toLocalDateTime());
-
-						log.info("Found friend for ID " + id + " - ID " + result.getId());
-
-						resultList.add(result);
-
-					}
-
-					log.info("Retrieved total of " + resultList.size() + " friends for ID " + id);
-
-				}
-
-			}
-		}
-
-		return resultList;
-
-	}
 }

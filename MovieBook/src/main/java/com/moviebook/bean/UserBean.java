@@ -1,8 +1,6 @@
-package com.moviebook.bean.user;
+package com.moviebook.bean;
 
 import java.time.LocalDateTime;
-
-import com.moviebook.bean.JsonBean;
 
 public class UserBean extends JsonBean {
 
@@ -17,16 +15,6 @@ public class UserBean extends JsonBean {
 
 	public UserBean() {
 
-	}
-
-	public UserBean(int id, String email, String name, String profilePhotoPath, LocalDateTime creationDateTime, LocalDateTime modificationDateTime) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.name = name;
-		this.profilePhotoPath = profilePhotoPath;
-		this.creationDateTime = creationDateTime;
-		this.modificationDateTime = modificationDateTime;
 	}
 
 	public int getId() {

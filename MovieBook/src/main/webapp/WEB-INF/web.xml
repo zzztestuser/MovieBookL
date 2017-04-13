@@ -11,10 +11,9 @@
   	<servlet-class>com.moviebook.servlet.SessionServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>UserServlet</servlet-name>
-  	<display-name>UserServlet</display-name>
-  	<description>HTTPServlet handling RESTful calls for user entities</description>
-  	<servlet-class>com.moviebook.servlet.UserServlet</servlet-class>
+  	<servlet-name>UserFriendsServlet</servlet-name>
+  	<display-name>UserFriendsServlet</display-name>
+  	<servlet-class>com.moviebook.servlet.UserFriendsServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>RecommendedMoviesServlet</servlet-name>
@@ -22,16 +21,26 @@
   	<description></description>
   	<servlet-class>com.moviebook.servlet.RecommendedMoviesServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>MovieInterestedFriendsServlet</servlet-name>
+  	<display-name>MovieInterestedFriendsServlet</display-name>
+  	<description></description>
+  	<servlet-class>com.moviebook.servlet.MovieInterestedFriendsServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
   	<url-pattern>/api/session</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>UserServlet</servlet-name>
-  	<url-pattern>/api/users/*</url-pattern>
+  	<servlet-name>UserFriendsServlet</servlet-name>
+  	<url-pattern>/api/users/friends</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>RecommendedMoviesServlet</servlet-name>
   	<url-pattern>/api/movies/recommended</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MovieInterestedFriendsServlet</servlet-name>
+  	<url-pattern>/api/movies/interested/friends</url-pattern>
   </servlet-mapping>
 </web-app>

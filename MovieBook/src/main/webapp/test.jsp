@@ -1,11 +1,11 @@
-<%@ page import="com.moviebook.bean.user.UserBean"%>
+<%@ page import="com.moviebook.bean.UserBean"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Test Page</title>
 
 <!-- CSS Includes -->
-<link rel="stylesheet" href="test_resources/css/styles.css" />
+<link rel="stylesheet" href="test/css/styles.css" />
 
 <!-- Javascript Includes -->
 <script type="text/javascript" src="test/js/jquery-3.1.1.js"></script>
