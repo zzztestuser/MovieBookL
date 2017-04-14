@@ -49,7 +49,7 @@
 </script>
 
 
-
+<!-- 
 <script>
  $( "#emailbutton" ).button().on( "click", function() {
      //for (i=0; i<rows; i++) {
@@ -60,7 +60,7 @@
  
 </script>
 
-
+ -->
 <style>
 #bg {
   position: fixed; jsp 
@@ -227,10 +227,16 @@
 <div id="bg">
   <img src="images/background-page.jpg" alt="">
 </div>
-<div class="loginInfo">
-	<img src="" alt="Profile picture" class="userDisplayPic" />
-	<p class="userDetails">User Details</p>		
+
+<%
+	if (session.getAttribute("currentUserBean") != null) {
+%>
+<div id="currentUser" style="display: none;">
+	<%=((UserBean) session.getAttribute("currentUserBean")).toJson()%>
 </div>
+<%
+	}
+%>
 <!--==============================
               header
 =================================-->
@@ -245,32 +251,52 @@
           <td width="378" height="28"></td>          
           <td width="46">search:</td>
           <td width="189">
-          	<form name="form1" method="post" action="">
-	            <label for="search"></label>
-	            <input type="text" name="search" id="search">
-         	</form>
+          	<div class="searchTerms">
+				<input name="movieSearch" type="text"
+					style="margin: 0px 5px 0px 5px" />
+				<button type="button" id="movieSearchButton"
+					onclick="movieSearchAction()">Search</button>
+			</div>
+			<div class="searchResults">
+				<table class="searchResultsTable" style="display: none">
+					<tr class="searchResultsRow">
+						<td class="searchResultDetail"><span
+							style="font-weight: bold;">Title:</span> <span
+							class="searchResultTitle"></span> <br /> <span
+							style="font-weight: bold;">Genre(s):</span> <span
+							class="searchResultGenres"></span> <br /> <span
+							class="searchResultDescription"></span></td>
+						<td class="searchResultActions">
+							<div class="interestedFriends">
+								<strong>Interested Friends</strong>
+								<div class="interestedFriendsList"></div>
+							</div>
+							<hr />
+							<div class="movieScreenings">
+								<strong>Screenings</strong>
+								<div class="movieScreeningsList"></div>
+							</div>
+							<div class="inviteActions">
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
          </td>
-          <td>
-          <img height="60" width="60" src="<%=((UserBean) session.getAttribute("currentUserBean")).getProfilePhotoPath()%>" alt="Profile picture" class="userDisplayPic" /> 
+         <td>
+          <img height="60" width="60" src="" alt="Profile picture" class="userDisplayPic" /> 
 		  <!-- To provide user initials! -->
 			<%
 				if (session.getAttribute("currentUserBean") != null) {
 			%>
-			<div id="currentUser"> Welcome 
-				<%= ((UserBean) session.getAttribute("currentUserBean")).getName() %>!
-			</div>
+			<div class="userDetails"></div>
 			<%
 				}			
 			%>
-		  </td>
-	         
+			<button type="button" id="logoutButton" onclick="logoutAction()">Logout</button>
+		</td>        
         </tr>
-        <tr>
-          <td width="378" height="28"></td>          
-          <td width="46"></td>
-          <td width="189"></td>
-         <td width="60"><button type="button" id="logoutButton" onclick="logoutAction()">Logout</button></td>
-        </tr>
+   
       </table>
     </div>
     <div class="clear"></div>
@@ -317,39 +343,20 @@
 ======================-->
 <div class="recommendation">
 <div class="container_12">
-    <div class="grid_12">
- <h3 style='color:#FF00FF'>Recommendations for you:</h3>
- <br>
- 
-</div></div></div>
-<br>
-<br>
-<div class="container_12">
-<div class="grid_12">    
+<div class="grid_12">
 
-<div id="movie1"></div>
-<script>
-	//document.getElementById('movie1').innerHTML = 'You are not authorized to use MovieBook.'; 
-	var table = document.createElement('table');
-	table.setAttribute('border','1');
-	table.setAttribute('width','100%')
-	var row = table.insertRow(0);
-	for(j=1; j<=10; j++){
-	    var text = document.createTextNode(String.fromCharCode(j+64));
-	    var cell = row.insertCell(j-1);
-	    cell.setAttribute('align','center')
-	    cell.appendChild(text);
-	}
-	document.getElementById("movie1").appendChild(table);
-</script>
+<div class="friendsList"></div>
 
-	
-<!--<a href="#none" onclick="window.open('invite.html','popup', 'width=600, height=500, scrollbars=auto'); return false;">	<img src="images/Divergent_M.jpg" id="diver1" alt="" class="fleft"></a>-->
+<div class="recommendMoviesList"></div>
+
+
+<!--
+<a href="#none" onclick="window.open('invite.html','popup', 'width=600, height=500, scrollbars=auto'); return false;">	<img src="images/Divergent_M.jpg" id="diver1" alt="" class="fleft"></a>
 <table border="1">
 <tr>
 	
 </tr>
-<!-- <tr>
+<tr>
 <td rowspan=4>
        <img src="images/Divergent_M.jpg" id="diver1" alt="" class="fleft">
        </td>
@@ -359,7 +366,7 @@
 </tr> 
 <tr><td>Director: Neil Burger; Writer: Evan Daugherty, Vanessa Taylor, Veronica Roth; Stars: Shailene Woodley, Theo James, Ashley Judd<br>
 In a world divided by factions based on virtues, Tris learns she's Divergent and won't fit in. When she discovers a plot to destroy Divergents, Tris and the mysterious Four must find out what makes Divergents dangerous before it's too late.</td></tr>
--->
+
 <tr>
 <td>
 
@@ -467,6 +474,7 @@ Two strangers find themselves linked in a bizarre way. When a connection forms, 
     <br>
 <div class="grid_5 prefix_1 gallery"> </div>
     <div class="clear"></div>
+-->
 <!--==============================
               footer_top
 =================================-->
