@@ -332,13 +332,32 @@ function updateMovieSearchResultActions(newRow, table, movie) {
                 "text" : "Invite"
             });
             inviteButton.data("movie", movie.id);
-
             inviteButton.click(handleInviteAction);
+
+            var eventNameElement = $("<input>", {
+                "type" : "text",
+                "name" : "eventNameInput",
+                "maxlength" : 255
+            }).css({
+               "width" : "100%" 
+            });
+
+            var eventDescElement = $("<textarea>", {
+                "name" : "eventDescInput",
+                "maxlength" : 1000,
+            }).css({
+                "width" : "100%",
+                "margin-bottom" : "5px"
+            });
 
             var attachPoint = newRow.find(".inviteActions");
             attachPoint.empty();
 
             attachPoint.append($("<hr />"));
+            attachPoint.append($("<span>").text("Event Name").css("margin-right", "5px"));
+            attachPoint.append(eventNameElement).append("<br />");
+            attachPoint.append($("<span>").text("Description"));
+            attachPoint.append(eventDescElement).append("<br />");
             attachPoint.append(inviteButton);
 
         }
@@ -362,23 +381,16 @@ function handleInviteAction() {
     var inviteData = {};
 
     var clearStatusMessage = function (attachPoint) {
-        console.log("clearStatusMessage firing!");
-        console.log("clear html:\n" + attachPoint.html());
         attachPoint.find(".inviteActionMessage").remove();
     }
 
     var addStatusMessage = function (message, color, attachPoint) {
-        console.log("addStatusMessage firing!");
-        console.log("message is " + message);
-        console.log("color is " + color);
-        console.log("attach html:\n" + attachPoint.html());
         attachPoint.append($("<div>").addClass("inviteActionMessage").css("color", color).text(message));
     }
 
     /* Handle friends */
     var selectedUserElements = $(this).parent().parent().find("input[name=inviteFriendOption" + idT + "]:checked");
 
-    
     if (selectedUserElements.length == 0) {
         // No elements selected!
         clearStatusMessage($(this).parent());
@@ -406,10 +418,24 @@ function handleInviteAction() {
     } else {
         inviteData["screening"] = $(selectedScreeningElements).val();
     }
+    
+    /* Get event name and description */    
+    var eventNameElement = $(this).parent().find("input[name=eventNameInput]");
+    eventNameElement.val(eventNameElement.val().trim());
+    inviteData["eventName"]  = eventNameElement.val();
+    if (!inviteData["eventName"]) {
+        clearStatusMessage($(this).parent());
+        addStatusMessage("Please enter an event name.", "red", $(this).parent());
+        return;
+    }
+    
+    var eventDescElement = $(this).parent().find("textarea[name=eventDescInput]");
+    eventDescElement.val(eventDescElement.val().trim());
+    inviteData["eventDescription"] = eventDescElement.val();
 
     console.log(JSON.stringify(inviteData));
     var attachPoint = $(this).parent();
-    console.log(attachPoint.html());
+    // console.log(attachPoint.html());
 
     // Make the AJAX call
     $.ajax({
@@ -419,7 +445,7 @@ function handleInviteAction() {
         dataType : "text",
         cache : false
     }).done(function () {
-        console.log("Success call for events invite");
+        // console.log("Success call for events invite");
         clearStatusMessage(attachPoint);
         addStatusMessage("Invite successfully sent.", "green", attachPoint);
 
