@@ -273,7 +273,7 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 		$.each(friends, function(index, friend) {
 			var selectOption = $("<input>", {
 				"type" : "checkbox",
-				"name" : "inviteFriendOption",
+				"name" : "inviteFriendOption" + movie.id,
 				"value" : friend.id
 			});
 			friendsList.append(selectOption);
@@ -313,11 +313,11 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 								function(index, screening) {
 									var screeningOption = $("<input>", {
 										"type" : "radio",
-										"name" : "inviteScreeningOption",
+										"name" : "inviteScreeningOption"
+												+ movie.id,
 										"value" : screening.id
 									});
 									screeningsList.append(screeningOption);
-									console.log(JSON.stringify(screening));
 									screeningsList
 											.append($("<span>")
 													.text(
@@ -348,6 +348,19 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 	$.when(friendsAJAX, screeningsAJAX).done(function() {
 		// Show invite button only if both succeeded;
 		if (!notFound) {
+			// Create the invite button
+			var inviteButton = $("<button>", {
+				"type" : "button",
+				"text" : "Invite"
+			});
+			inviteButton.data("movie", movie.id);
+
+			inviteButton.click(handleInviteAction);
+
+			var attachPoint = newRow.find(".searchResultActions");
+
+			attachPoint.append($("<hr />"));
+			attachPoint.append(inviteButton);
 
 		}
 
@@ -360,6 +373,83 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 function convertLocalDateTimeToString(dateTime) {
 	return dateTime.date.day.toString().padStart(2, "0") + "/"
 			+ dateTime.date.month.toString().padStart(2, "0") + "/"
-			+ dateTime.date.year.toString() + " " + dateTime.time.hour.toString().padStart(2, "0")
-			+ ":" + dateTime.time.minute.toString().padStart(2, "0");
+			+ dateTime.date.year.toString() + " "
+			+ dateTime.time.hour.toString().padStart(2, "0") + ":"
+			+ dateTime.time.minute.toString().padStart(2, "0");
+}
+
+function handleInviteAction() {
+
+	idT = $(this).data("movie");
+	var inviteData = {};
+
+	var clearStatusMessage = function(attachPoint) {
+		console.log("clearStatusMessage firing!");
+		attachPoint.find(".inviteActionMessage").remove();
+	}
+
+	var addStatusMessage = function(message, color, attachPoint) {
+		console.log("addStatusMessage firing!");
+		attachPoint.append($("<div>").addClass("inviteActionMessage").css(
+				"color", color).text(message));
+	}
+
+	/* Handle friends */
+	var selectedUserElements = $(this).parent().find(
+			"input[name=inviteFriendOption" + idT + "]:checked");
+
+	if (selectedUserElements.length == 0) {
+		// No elements selected!
+		clearStatusMessage($(this).parent());
+		addStatusMessage("No friends selected! Please select a friend.", "red",
+				$(this).parent());
+		return;
+	}
+
+	selectedUserElements.each(function(index, element) {
+		if (!inviteData.hasOwnProperty("friend")) {
+			inviteData["friend"] = $(element).val();
+		} else {
+			inviteData["friend"] = inviteData["friend"] + ","
+					+ $(element).val();
+		}
+
+	});
+
+	/* Handle screenings */
+	var selectedScreeningElements = $(this).parent().find(
+			"input[name=inviteScreeningOption" + idT + "]:checked");
+
+	if (selectedScreeningElements.length == 0) {
+		// No elements selected!
+		clearStatusMessage($(this).parent());
+		addStatusMessage("No screening selected! Please select a screening.",
+				"red", $(this).parent());
+		return;
+	} else {
+		inviteData["screening"] = $(selectedScreeningElements).val();
+	}
+
+	console.log(JSON.stringify(inviteData));
+	var attachPoint = $(this).parent();
+
+	// Make the AJAX call
+	$.ajax({
+		url: "api/events/invite",
+		data: inviteData,
+		type: "POST",
+		dataType: "text",
+		cache: false
+	}).done(function() {
+		clearStatusMessage(attachPoint);
+		addStatusMessage("Invite successfully sent.",
+				"green", attachPoint);
+
+	}).fail(function() {
+		clearStatusMessage(attachPoint);
+		addStatusMessage("Error when sending invite. Please contact system administrators",
+				"red", attachPoint);
+		
+	});
+
 }
