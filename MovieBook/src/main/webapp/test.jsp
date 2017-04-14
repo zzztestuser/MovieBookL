@@ -37,16 +37,13 @@
 		<button class="logout" style="float: right;">Logout</button>
 	</div>
 
-	<div class="friendsList" style="clear: both; display: none">
-		<h1>Friends</h1>
-	</div>
+	<div class="friendsList" style="clear: both; display: none"></div>
 
-	<div class="recommendMoviesList" style="display: none">
-		<h1>Recommended Movies</h1>
-	</div>
+	<div class="recommendMoviesList" style="display: none"></div>
 
 
 	<div class="movieSearch" style="display: none">
+		<hr />
 		<h1>Search for movie</h1>
 		<div class="searchTerms">
 			<strong>Title</strong><input name="movieSearch" type="text"
@@ -57,16 +54,23 @@
 		<div class="searchResults">
 			<table class="searchResultsTable" style="display: none">
 				<tr class="searchResultsRow">
-					<td class="searchResultDetail">
-						<span style="font-weight: bold;">Title:</span>
-						<span class="searchResultTitle"></span>
-						<br />
-						<span style="font-weight: bold;">Genre(s):</span>
-						<span class="searchResultGenres"></span>
-						<br />
-						<span class="searchResultDescription"></span>
+					<td class="searchResultDetail"><span
+						style="font-weight: bold;">Title:</span> <span
+						class="searchResultTitle"></span> <br /> <span
+						style="font-weight: bold;">Genre(s):</span> <span
+						class="searchResultGenres"></span> <br /> <span
+						class="searchResultDescription"></span></td>
+					<td class="searchResultActions">
+						<div class="interestedFriends">
+							<strong>Interested Friends</strong>
+							<div class="interestedFriendsList"></div>
+						</div>
+						<hr />
+						<div class="movieScreenings">
+							<strong>Screenings</strong>
+							<div class="movieScreeningsList"></div>
+						</div>
 					</td>
-					<td class="searchResultButtons"></td>
 				</tr>
 			</table>
 		</div>

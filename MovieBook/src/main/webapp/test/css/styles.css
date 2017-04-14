@@ -31,7 +31,18 @@ button:active {
 	font-weight: bold;
 }
 
-table.searchResultsTable, td.searchResultDetail {
+table.searchResultsTable, td.searchResultDetail, td.searchResultActions {
 	border: 1px solid gray;
 	border-collapse: collapse;
+}
+
+
+td.searchResultDetail {
+	padding: 5px 5px 5px 5px;
+	width: 60%;	
+}
+
+td.searchResultActions {
+	padding: 5px 5px 5px 5px;
+	width: 40%;	
 }

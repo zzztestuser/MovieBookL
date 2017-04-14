@@ -30,15 +30,14 @@ public class RecommendationsManager {
 
 		log.debug("Retrieving recommended movies for ID " + userID);
 
-		final String sqlRecommendedMovies = "SELECT `m`.`id`, `m`.`title`, `m`.`description`, `m`.`language`, `m`.`duration`, `m`.`posterSmallPath`, `m`.`posterMediumPath`, `m`.`posterLargePath` "
+		final String sql = "SELECT `m`.`id`, `m`.`title`, `m`.`description`, `m`.`language`, `m`.`duration`, `m`.`posterSmallPath`, `m`.`posterMediumPath`, `m`.`posterLargePath` "
 				+ " FROM `movie` `m`, `vw_user_recommended_movies` `rm` WHERE (`rm`.`userID` = ?) AND (`m`.`id` = `rm`.`movieID`) ORDER BY `title` ASC";
-		final String sqlGetGenres = "SELECT `g`.`name` FROM `genre` `g`, `movie_genre` `m` WHERE `m`.`movieID` = ? AND `g`.`id` = `m`.`genreID`;";
 
 		ArrayList<MovieBean> mvList = new ArrayList<>();
 
 		try (Connection conn = DatabaseHelper.getDbConnection()) {
 
-			try (PreparedStatement stmt = conn.prepareStatement(sqlRecommendedMovies)) {
+			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
 				stmt.setInt(1, userID);
 				try (ResultSet rs = stmt.executeQuery()) {

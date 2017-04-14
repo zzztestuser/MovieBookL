@@ -76,6 +76,7 @@ public class RecommendedMoviesServlet extends HttpServlet {
 				response.setCharacterEncoding("UTF-8");
 				response.setContentType("text/plain");
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+				return;
 			} else {
 				log.info(rcMovies.size() + " recommended movies for user " + user);
 				returnJson(response, rcMovies);
