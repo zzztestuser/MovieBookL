@@ -37,9 +37,23 @@
 		<button class="logout" style="float: right;">Logout</button>
 	</div>
 
+	<div class="eventsList" style="clear: both; display: none">
+		<h2>Invites</h2>
+		<div class="eventItem" style="border: 1px solid green; margin: 10px; float: left; padding: 5px">
+			<div class="eventItemDetails" >
+				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Movie</span><span class="eventMovieTitle"></span><br />
+				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Location</span><span class="eventMovieLocation"></span><br />
+				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Screening Time</span><span class="eventScreeningTime"></span><br />
+				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Sent By</span><span class="eventSentBy"></span><br />
+
+			</div>
+		</div>
+
+	</div>
+
 	<div class="friendsList" style="clear: both; display: none"></div>
 
-	<div class="recommendMoviesList" style="display: none"></div>
+	<div class="recommendMoviesList" style="clear: both; display: none"></div>
 
 
 	<div class="movieSearch" style="display: none">
@@ -70,8 +84,7 @@
 							<strong>Screenings</strong>
 							<div class="movieScreeningsList"></div>
 						</div>
-						<div class="inviteActions">
-						</div>
+						<div class="inviteActions"></div>
 					</td>
 				</tr>
 			</table>

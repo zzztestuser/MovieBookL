@@ -54,7 +54,7 @@ public class MoviesRecommendedFriendsServlet extends HttpServlet {
 			log.error("No movie specifed when checking for interested users");
 			response.setContentType("text/plain");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().write("No movie ID passed ");
+			response.getWriter().write("No movie ID passed");
 			return;
 		} else {
 			// TODO Implement support for semicomma delimited multiple movie ids

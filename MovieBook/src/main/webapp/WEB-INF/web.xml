@@ -40,10 +40,16 @@
   	<servlet-class>com.moviebook.servlet.MovieScreeningsServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>EventsInviteServlet</servlet-name>
-  	<display-name>EventsInviteServlet</display-name>
+  	<servlet-name>EventsServlet</servlet-name>
+  	<display-name>EventsServlet</display-name>
   	<description></description>
-  	<servlet-class>com.moviebook.servlet.EventsInviteServlet</servlet-class>
+  	<servlet-class>com.moviebook.servlet.EventsServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>MoviesServlet</servlet-name>
+  	<display-name>MoviesServlet</display-name>
+  	<description></description>
+  	<servlet-class>com.moviebook.servlet.MoviesServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>SessionServlet</servlet-name>
@@ -70,7 +76,11 @@
   	<url-pattern>/api/movies/screening</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>EventsInviteServlet</servlet-name>
-  	<url-pattern>/api/events/invite</url-pattern>
+  	<servlet-name>EventsServlet</servlet-name>
+  	<url-pattern>/api/events</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MoviesServlet</servlet-name>
+  	<url-pattern>/api/movies</url-pattern>
   </servlet-mapping>
 </web-app>

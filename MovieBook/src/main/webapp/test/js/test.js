@@ -31,6 +31,7 @@ function initLoggedOut() {
     $("div.loginInfo").hide();
     $("div.recommendMoviesList").hide();
     $("div.movieSearch").hide();
+    $("div.eventsList").hide();
 
 }
 
@@ -39,7 +40,7 @@ function initLoggedIn() {
     updateUserDetails();
     updateUserFriends();
     updateRecommendedMovies();
-
+    updateInvites();
     $("div.movieSearch").show();
 
 }
@@ -339,7 +340,7 @@ function updateMovieSearchResultActions(newRow, table, movie) {
                 "name" : "eventNameInput",
                 "maxlength" : 255
             }).css({
-               "width" : "100%" 
+                "width" : "100%"
             });
 
             var eventDescElement = $("<textarea>", {
@@ -418,17 +419,17 @@ function handleInviteAction() {
     } else {
         inviteData["screening"] = $(selectedScreeningElements).val();
     }
-    
-    /* Get event name and description */    
+
+    /* Get event name and description */
     var eventNameElement = $(this).parent().find("input[name=eventNameInput]");
     eventNameElement.val(eventNameElement.val().trim());
-    inviteData["eventName"]  = eventNameElement.val();
+    inviteData["eventName"] = eventNameElement.val();
     if (!inviteData["eventName"]) {
         clearStatusMessage($(this).parent());
         addStatusMessage("Please enter an event name.", "red", $(this).parent());
         return;
     }
-    
+
     var eventDescElement = $(this).parent().find("textarea[name=eventDescInput]");
     eventDescElement.val(eventDescElement.val().trim());
     inviteData["eventDescription"] = eventDescElement.val();
@@ -439,7 +440,7 @@ function handleInviteAction() {
 
     // Make the AJAX call
     $.ajax({
-        url : "api/events/invite",
+        url : "api/events",
         data : inviteData,
         type : "POST",
         dataType : "text",
@@ -454,5 +455,60 @@ function handleInviteAction() {
         addStatusMessage("Error when sending invite. Please contact system administrators", "red", attachPoint);
 
     });
+
+}
+
+function updateInvites() {
+
+    $.ajax({
+        url : "api/events",
+        type : "GET",
+        dataType : "json",
+        cache : false
+    }).done(function (results) {
+        console.log("Number of elements returned is " + results.length);
+        // console.log("Output of getting events is: \n" + JSON.stringify(result, undefined, 2));
+
+        if (results.length == 0) {
+            // Don't do anything, just exit
+            return;
+        }
+
+        var eventListOverall = $("div.eventsList");
+        console.log("size of eventslist is \n" + eventListOverall.html());
+        var eventListElement = $("div.eventsList .eventItem:first-of-type");
+        console.log("size of eventslistE is " + eventListElement.length);
+        eventListElement.detach();
+        eventListOverall.empty();
+        eventListOverall.append($("<h2>").text("Events"));
+
+        $(results).each(function (index, result) {
+            $.ajax({
+                url : "api/movies",
+                type : "GET",
+                data : {
+                    "id" : result.movieID
+                },
+                dataType : "json",
+                cache : false
+            }).done(function (movie) {
+                console.log("Done with movie " + movie.id + " name " + movie.title);
+                var newEvent = eventListElement.clone();
+                newEvent.find("span.eventMovieTitle").text(movie.title);
+                newEvent.find("span.eventMovieLocation").text(result.theatreName + ", " + result.theatreLocation);
+                newEvent.find("span.eventScreeningTime").text(convertLocalDateTimeToString(result.screeningDateTime));
+                newEvent.find("span.eventSentBy").text(result.createdByName);
+                // switch (result.)
+                // newEvent.find("span.eventSentBy").text(result.createdByName);
+                console.log(newEvent.html());
+                
+                eventListOverall.append(newEvent);
+            })
+
+        })
+
+        eventListOverall.show();
+
+    })
 
 }
