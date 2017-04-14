@@ -103,12 +103,13 @@ function updateUserFriends() {
         	}
         	else {
         	    var tr = $("<tr></tr>");
-	            tr.append($("<td>Name</td>").css("font-weight", "bold"));
+	            tr.append($("<td>Name:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
 	            tr.append($("<td>" + friendsList[i].name + "</td>"));
-	            tr.append($("<td>Email</td>").css("font-weight", "bold"));
+	            tr.append($("<td>&nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
 	            tr.append($("<td>" + friendsList[i].email + "</td>"));
-	            tr.append($("<td>Invite status</td>").css("font-weight", "bold"));
-	            tr.append($("<td>" + friendsList[i].status + "</td>"));
+	            tr.append($("<td>&nbsp;&nbsp;&nbsp;&nbsp;Invite status:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
+	            tr.append($("<td>" + friendsList[i].status + "</td>"));	            
+	            tr.append($("<tr></tr>"));
 	            table.append(tr);
         	}
         }
