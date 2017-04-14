@@ -96,22 +96,16 @@ function updateUserFriends() {
         friendsListDiv.append($("<h3>").text("Friends List"));
         var table = $("<table></table>");
 
-        for ( var i in friendsList) {
-        	if (i == 0) {
-        		var text = $("<tr> You have no friends yet. </tr>");
-            	table.append(text);
-        	}
-        	else {
-        	    var tr = $("<tr></tr>");
-	            tr.append($("<td>Name:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
-	            tr.append($("<td>" + friendsList[i].name + "</td>"));
-	            tr.append($("<td>&nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
-	            tr.append($("<td>" + friendsList[i].email + "</td>"));
-	            tr.append($("<td>&nbsp;&nbsp;&nbsp;&nbsp;Invite status:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
-	            tr.append($("<td>" + friendsList[i].status + "</td>"));	            
-	            tr.append($("<tr></tr>"));
-	            table.append(tr);
-        	}
+        for (var i in friendsList) {
+    	    var tr = $("<tr></tr>");
+            tr.append($("<td>Name:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
+            tr.append($("<td>" + friendsList[i].name + "</td>"));
+            tr.append($("<td>&nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
+            tr.append($("<td>" + friendsList[i].email + "</td>"));
+            tr.append($("<td>&nbsp;&nbsp;&nbsp;&nbsp;Invite status:&nbsp;&nbsp;&nbsp;&nbsp;</td>").css("font-weight", "bold"));
+            tr.append($("<td>" + friendsList[i].status + "</td>"));	            
+            tr.append($("<tr></tr>"));
+            table.append(tr);
         }
         
         friendsListDiv.append(table);
