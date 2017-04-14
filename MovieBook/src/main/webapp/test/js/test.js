@@ -244,6 +244,8 @@ function updateMovieSearchResultDetails(newRow, table, movie) {
 
 function updateMovieSearchResultActions(newRow, table, movie) {
 
+	var notFound = false;
+
 	// Get interested friends
 	var friendsAJAX = $.ajax({
 		url : "api/movies/recommended/friends",
@@ -258,12 +260,15 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 	friendsAJAX.done(function(friends, textStatus, jqxHR) {
 		var friendsList = newRow.find(".interestedFriendsList");
 		friendsList.empty();
-		
+
 		if (jqxHR.status == 204) {
 			// No Friends found
-			friendsList.append($("<span>").css("color","red").text("No interested friends."));
+			friendsList.append($("<span>").css("color", "red").text(
+					"No interested friends."));
+			notFound = true;
+			return;
 		}
-		
+
 		// Setup friends
 		$.each(friends, function(index, friend) {
 			var selectOption = $("<input>", {
@@ -287,46 +292,74 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 		dataType : "json"
 	});
 
-	screeningsAJAX.done(function(screenings, textStatus, jqxHR) {
-		var screeningsList = newRow.find(".movieScreeningsList");
-		screeningsList.empty();
+	screeningsAJAX
+			.done(function(screenings, textStatus, jqxHR) {
+				var screeningsList = newRow.find(".movieScreeningsList");
+				screeningsList.empty();
 
-		if (jqxHR.status == 204) {
-			// No elements found!
-			screeningsList.append($("<span>").css("color","red").text("No screenings found"));
-			return;
-		} 
-		
-		var screeningsList = newRow.find(".movieScreeningsList");
-		screeningsList.empty();
-		$.each(screenings, function(index, screening) {
-			var screeningOption = $("<input>", {
-				"type" : "radio",
-				"name" : "inviteScreeningOption",
-				"value" : screening.id
+				if (jqxHR.status == 204) {
+					// No elements found!
+					screeningsList.append($("<span>").css("color", "red").text(
+							"No screenings found"));
+					notFound = true;
+					return;
+				}
+
+				var screeningsList = newRow.find(".movieScreeningsList");
+				screeningsList.empty();
+				$
+						.each(
+								screenings,
+								function(index, screening) {
+									var screeningOption = $("<input>", {
+										"type" : "radio",
+										"name" : "inviteScreeningOption",
+										"value" : screening.id
+									});
+									screeningsList.append(screeningOption);
+									console.log(JSON.stringify(screening));
+									screeningsList
+											.append($("<span>")
+													.text(
+															screening.theatreName
+																	+ " - "
+																	+ screening.theatreLocation));
+									screeningsList.append($("<br />"));
+									screeningsList
+											.append($("<span>")
+													.text(
+															convertLocalDateTimeToString(screening.screeningDateTime)));
+									screeningsList.append($("<br />"));
+
+								});
 			});
-			screeningsList.append(screeningOption);
-			screeningsList.append($("<span>").text(screening.theatreName + " - " + screening.theatreLocation));
-			screeningsList.append($("<br />"));
-		});
-	});
-	
+
 	screeningsAJAX.fail(function(jqXHR, textStatus, errorThrown) {
 		if (jqXHR.status == 404) {
 			// No screening
 			var screeningsList = newRow.find(".movieScreeningsList");
 			screeningsList.empty();
-			screeningsList.append($("<span>").css("color","red").text("No screenings found"));
+			screeningsList.append($("<span>").css("color", "red").text(
+					"No screenings found"));
 		}
-		
+
 	});
 
 	$.when(friendsAJAX, screeningsAJAX).done(function() {
 		// Show invite button only if both succeeded;
-		newRow.find(".searchResultActions").append("<hr />");
+		if (!notFound) {
+
+		}
 
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		// Don't show any button if either failed
 	});
 
+}
+
+function convertLocalDateTimeToString(dateTime) {
+	return dateTime.date.day.toString().padStart(2, "0") + "/"
+			+ dateTime.date.month.toString().padStart(2, "0") + "/"
+			+ dateTime.date.year.toString() + " " + dateTime.time.hour.toString().padStart(2, "0")
+			+ ":" + dateTime.time.minute.toString().padStart(2, "0");
 }
