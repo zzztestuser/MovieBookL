@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.moviebook.bean.AttendeeBean;
+import com.moviebook.bean.AttendeeBean.InviteStatus;
 import com.moviebook.bean.EventBean;
 
 public class EventsManager {
@@ -198,6 +199,34 @@ public class EventsManager {
 
 		log.info(results.size() + " events retrieved for user " + userID);
 
+		return results.isEmpty() ? null : results;
+	}
+
+	public static List<AttendeeBean> getAttendeesForEvent(int eventID) throws SQLException {
+		List<AttendeeBean> results = new ArrayList<>();
+
+		final String sql = "SELECT `ea`.`userID`, `u`.`name`, `ea`.`attendanceStatus` FROM `event_attendees` `ea`, `user` `u` WHERE (`ea`.`eventID` = ?) AND (`u`.`id` = `ea`.`userID`)";
+
+		log.info("Retriving lightweight attendees for event " + eventID);
+		try (Connection conn = DatabaseHelper.getDbConnection()) {
+
+			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+				stmt.setInt(1, eventID);
+				try (ResultSet rs = stmt.executeQuery()) {
+					while (rs.next()) {
+						AttendeeBean ab = new AttendeeBean();
+						
+						ab.setId(rs.getInt("userID"));
+						ab.setName(StringUtils.trim(rs.getString("name")));
+						ab.setStatus(InviteStatus.valueOf(rs.getInt("attendanceStatus")));
+						results.add(ab);
+						
+					}
+				}
+			}
+		}
+
+		log.info(results.size() + " lightweight attendees retrieved for event " + eventID);
 		return results.isEmpty() ? null : results;
 	}
 

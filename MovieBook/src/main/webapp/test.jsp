@@ -39,12 +39,13 @@
 
 	<div class="eventsList" style="clear: both; display: none">
 		<h2>Invites</h2>
-		<div class="eventItem" style="border: 1px solid green; margin: 10px; float: left; padding: 5px">
+		<div class="eventItem" style="border: 1px solid lightgray; margin: 10px; float: left; padding: 5px">
 			<div class="eventItemDetails" >
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Movie</span><span class="eventMovieTitle"></span><br />
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Location</span><span class="eventMovieLocation"></span><br />
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Screening Time</span><span class="eventScreeningTime"></span><br />
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Sent By</span><span class="eventSentBy"></span><br />
+				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Invite status</span><span class="eventInviteStatus"></span><br />
 
 			</div>
 		</div>

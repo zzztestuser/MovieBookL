@@ -483,6 +483,15 @@ function updateInvites() {
         eventListOverall.append($("<h2>").text("Events"));
 
         $(results).each(function (index, result) {
+            console.log(JSON.stringify(result, null, 2));
+
+            var status;
+            for (var i = 0; i < result.attendees.length; i++) {
+                if (result.attendees[i].name == movieBook.currentUser.name) {
+                    status = result.attendees[i].status;
+                }
+            }
+
             $.ajax({
                 url : "api/movies",
                 type : "GET",
@@ -498,10 +507,21 @@ function updateInvites() {
                 newEvent.find("span.eventMovieLocation").text(result.theatreName + ", " + result.theatreLocation);
                 newEvent.find("span.eventScreeningTime").text(convertLocalDateTimeToString(result.screeningDateTime));
                 newEvent.find("span.eventSentBy").text(result.createdByName);
-                // switch (result.)
-                // newEvent.find("span.eventSentBy").text(result.createdByName);
-                console.log(newEvent.html());
-                
+
+                var inviteStatus = newEvent.find("span.eventInviteStatus");
+                switch (status.toLowerCase()) {
+                case "sent":
+                    inviteStatus.text("Sent").css("color", "blue");
+                    break;
+                case "accepted":
+                    inviteStatus.text("Accepted").css("color", "green");
+                    break;
+                case "rejected":
+                    inviteStatus.text("Rejected").css("color", "red");
+                    break;
+                    
+                }
+
                 eventListOverall.append(newEvent);
             })
 

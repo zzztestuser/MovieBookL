@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.moviebook.bean.AttendeeBean;
 import com.moviebook.bean.EventBean;
 import com.moviebook.bean.UserBean;
@@ -73,15 +74,21 @@ public class EventsServlet extends HttpServlet {
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 				return;
 			} else {
-
 				log.info(events.size() + " events retrieved for user " + user);
+
+				// Set the attendees
+				for (EventBean i : events) {
+					i.setAttendees(EventsManager.getAttendeesForEvent(i.getId()));
+					log.info((i.getAttendees() == null ? "0" : i.getAttendees().size()) + " attendees for event " + i.getId());
+				}
+
 
 				Gson gs = new Gson();
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.getWriter().write(gs.toJson(events));
-				log.debug(gs.toJson(events));
+				// log.debug("events JSON is " + gspp.toJson(events));
 
 			}
 
