@@ -1,7 +1,7 @@
 <%@ page import="com.moviebook.bean.UserBean"%>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test Page</title>
 
 <!-- CSS Includes -->
@@ -69,6 +69,8 @@
 						<div class="movieScreenings">
 							<strong>Screenings</strong>
 							<div class="movieScreeningsList"></div>
+						</div>
+						<div class="inviteActions">
 						</div>
 					</td>
 				</tr>

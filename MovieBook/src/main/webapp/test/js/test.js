@@ -335,7 +335,8 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 
             inviteButton.click(handleInviteAction);
 
-            var attachPoint = newRow.find(".searchResultActions");
+            var attachPoint = newRow.find(".inviteActions");
+            attachPoint.empty();
 
             attachPoint.append($("<hr />"));
             attachPoint.append(inviteButton);
@@ -344,6 +345,8 @@ function updateMovieSearchResultActions(newRow, table, movie) {
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
         // Don't show any button if either failed
+        var attachPoint = newRow.find(".inviteActions");
+        attachPoint.empty();
     });
 
 }
@@ -360,17 +363,22 @@ function handleInviteAction() {
 
     var clearStatusMessage = function (attachPoint) {
         console.log("clearStatusMessage firing!");
+        console.log("clear html:\n" + attachPoint.html());
         attachPoint.find(".inviteActionMessage").remove();
     }
 
     var addStatusMessage = function (message, color, attachPoint) {
         console.log("addStatusMessage firing!");
+        console.log("message is " + message);
+        console.log("color is " + color);
+        console.log("attach html:\n" + attachPoint.html());
         attachPoint.append($("<div>").addClass("inviteActionMessage").css("color", color).text(message));
     }
 
     /* Handle friends */
-    var selectedUserElements = $(this).parent().find("input[name=inviteFriendOption" + idT + "]:checked");
+    var selectedUserElements = $(this).parent().parent().find("input[name=inviteFriendOption" + idT + "]:checked");
 
+    
     if (selectedUserElements.length == 0) {
         // No elements selected!
         clearStatusMessage($(this).parent());
@@ -388,7 +396,7 @@ function handleInviteAction() {
     });
 
     /* Handle screenings */
-    var selectedScreeningElements = $(this).parent().find("input[name=inviteScreeningOption" + idT + "]:checked");
+    var selectedScreeningElements = $(this).parent().parent().find("input[name=inviteScreeningOption" + idT + "]:checked");
 
     if (selectedScreeningElements.length == 0) {
         // No elements selected!
@@ -401,6 +409,7 @@ function handleInviteAction() {
 
     console.log(JSON.stringify(inviteData));
     var attachPoint = $(this).parent();
+    console.log(attachPoint.html());
 
     // Make the AJAX call
     $.ajax({
@@ -410,6 +419,7 @@ function handleInviteAction() {
         dataType : "text",
         cache : false
     }).done(function () {
+        console.log("Success call for events invite");
         clearStatusMessage(attachPoint);
         addStatusMessage("Invite successfully sent.", "green", attachPoint);
 
