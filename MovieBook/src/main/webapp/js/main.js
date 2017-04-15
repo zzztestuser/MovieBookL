@@ -13,7 +13,7 @@ function pageInit() {
 
     if (userInfo.length == 0) {
         // Not logged in
-        initLoggedOut();
+        //initLoggedOut();
     } else {
         // Logged in.
         var user = JSON.parse(userInfo.text());
@@ -26,11 +26,10 @@ function pageInit() {
 }
 
 function initLoggedIn() {
-
     updateUserDetails();
     updateUserFriends();
     updateRecommendedMovies();
-
+    updateInvites();
     $("div.movieSearch").show();
 
 }
@@ -321,13 +320,32 @@ function updateMovieSearchResultActions(newRow, table, movie) {
                 "text" : "Invite"
             });
             inviteButton.data("movie", movie.id);
-
             inviteButton.click(handleInviteAction);
+
+            var eventNameElement = $("<input>", {
+                "type" : "text",
+                "name" : "eventNameInput",
+                "maxlength" : 255
+            }).css({
+                "width" : "100%"
+            });
+
+            var eventDescElement = $("<textarea>", {
+                "name" : "eventDescInput",
+                "maxlength" : 1000,
+            }).css({
+                "width" : "100%",
+                "margin-bottom" : "5px"
+            });
 
             var attachPoint = newRow.find(".inviteActions");
             attachPoint.empty();
 
             attachPoint.append($("<hr />"));
+            attachPoint.append($("<span>").text("Event Name").css("margin-right", "5px"));
+            attachPoint.append(eventNameElement).append("<br />");
+            attachPoint.append($("<span>").text("Description"));
+            attachPoint.append(eventDescElement).append("<br />");
             attachPoint.append(inviteButton);
 
         }
@@ -351,23 +369,16 @@ function handleInviteAction() {
     var inviteData = {};
 
     var clearStatusMessage = function (attachPoint) {
-        console.log("clearStatusMessage firing!");
-        console.log("clear html:\n" + attachPoint.html());
         attachPoint.find(".inviteActionMessage").remove();
     }
 
     var addStatusMessage = function (message, color, attachPoint) {
-        console.log("addStatusMessage firing!");
-        console.log("message is " + message);
-        console.log("color is " + color);
-        console.log("attach html:\n" + attachPoint.html());
         attachPoint.append($("<div>").addClass("inviteActionMessage").css("color", color).text(message));
     }
 
     /* Handle friends */
     var selectedUserElements = $(this).parent().parent().find("input[name=inviteFriendOption" + idT + "]:checked");
 
-    
     if (selectedUserElements.length == 0) {
         // No elements selected!
         clearStatusMessage($(this).parent());
@@ -396,19 +407,33 @@ function handleInviteAction() {
         inviteData["screening"] = $(selectedScreeningElements).val();
     }
 
+    /* Get event name and description */
+    var eventNameElement = $(this).parent().find("input[name=eventNameInput]");
+    eventNameElement.val(eventNameElement.val().trim());
+    inviteData["eventName"] = eventNameElement.val();
+    if (!inviteData["eventName"]) {
+        clearStatusMessage($(this).parent());
+        addStatusMessage("Please enter an event name.", "red", $(this).parent());
+        return;
+    }
+
+    var eventDescElement = $(this).parent().find("textarea[name=eventDescInput]");
+    eventDescElement.val(eventDescElement.val().trim());
+    inviteData["eventDescription"] = eventDescElement.val();
+
     console.log(JSON.stringify(inviteData));
     var attachPoint = $(this).parent();
-    console.log(attachPoint.html());
+    // console.log(attachPoint.html());
 
     // Make the AJAX call
     $.ajax({
-        url : "api/events/invite",
+        url : "api/events",
         data : inviteData,
         type : "POST",
         dataType : "text",
         cache : false
     }).done(function () {
-        console.log("Success call for events invite");
+        // console.log("Success call for events invite");
         clearStatusMessage(attachPoint);
         addStatusMessage("Invite successfully sent.", "green", attachPoint);
 
@@ -418,4 +443,145 @@ function handleInviteAction() {
 
     });
 
+}
+
+function updateInvites() {
+
+    $.ajax({
+        url : "api/events",
+        type : "GET",
+        dataType : "json",
+        cache : false
+    }).done(function (results) {
+        console.log("Number of elements returned is " + results.length);
+        // console.log("Output of getting events is: \n" + JSON.stringify(result, undefined, 2));
+
+        if (results.length == 0) {
+            // Don't do anything, just exit
+            return;
+        }
+
+        var eventListOverall = $("div.eventsList");
+        console.log("size of eventslist is \n" + eventListOverall.html());
+        var eventListElement = $("div.eventsList .eventItem:first-of-type");
+        console.log("size of eventslistE is " + eventListElement.length);
+        eventListElement.detach();
+        eventListOverall.empty();
+        eventListOverall.append($("<h2>").text("Events"));
+
+        $(results).each(function (index, result) {
+            console.log(JSON.stringify(result, null, 2));
+
+            var status;
+            for (var i = 0; i < result.attendees.length; i++) {
+                if (result.attendees[i].name == movieBook.currentUser.name) {
+                    status = result.attendees[i].status;
+                }
+            }
+
+            $.ajax({
+                url : "api/movies",
+                type : "GET",
+                data : {
+                    "id" : result.movieID
+                },
+                dataType : "json",
+                cache : false
+            }).done(function (movie) {
+                console.log("Done with movie " + movie.id + " name " + movie.title);
+                var newEvent = eventListElement.clone();
+                newEvent.find("span.eventMovieTitle").text(movie.title);
+                newEvent.find("span.eventMovieLocation").text(result.theatreName + ", " + result.theatreLocation);
+                newEvent.find("span.eventScreeningTime").text(convertLocalDateTimeToString(result.screeningDateTime));
+                newEvent.find("span.eventSentBy").text(result.createdByName);
+
+                var actionsArea = newEvent.find("div.eventItemAction");
+                actionsArea.empty();
+
+                var inviteStatus = newEvent.find("span.eventInviteStatus");
+                switch (status.toLowerCase()) {
+                case "sent":
+                    var dataToBePassed = {
+                        "actionElement" : actionsArea,
+                        "inviteElement" : inviteStatus
+                    };
+                    var acceptButton = $("<button>", {
+                        "type" : "button",
+                        "text" : "Accept"
+                    }).css({
+                        "margin-left" : "10px",
+                        "margin-right" : "10px"
+                    });
+                    acceptButton.data("event", result.id);
+                    acceptButton.click(dataToBePassed, acceptEventButton);
+
+                    var rejectButton = $("<button>", {
+                        "type" : "button",
+                        "text" : "Reject",
+                    }).css({
+                        "margin-left" : "10px",
+                        "margin-right" : "10px"
+                    });
+
+                    rejectButton.data("event", result.id);
+                    rejectButton.click(dataToBePassed, rejectEventButton);
+                    
+                    actionsArea.append(acceptButton);
+                    actionsArea.append(rejectButton);
+                    
+                    
+                    break;
+                case "accepted":
+                    inviteStatus.text("Accepted").css("color", "green");
+                    break;
+                case "rejected":
+                    inviteStatus.text("Rejected").css("color", "red");
+                    break;
+
+                }
+
+                eventListOverall.append(newEvent);
+                
+            })
+
+        })
+
+        eventListOverall.show();
+
+    })
+
+}
+
+function acceptEventButton(event) {
+
+    var arguments = {};
+    arguments.event = $(this).data("event");
+
+    $.ajax({
+        url : "api/events/invite",
+        type : "POST",
+        data : arguments,
+        dataType : "json",
+        cache : false
+    }).done(function () {
+        event.data.actionElement.empty();
+        event.data.inviteElement.text("Accepted").css("color", "green");
+    })
+}
+
+function rejectEventButton(event) {
+
+    var arguments = {};
+    arguments.event = $(this).data("event");
+
+    $.ajax({
+        url : "api/events/invite",
+        type : "DELETE",
+        data : arguments,
+        dataType : "json",
+        cache : false
+    }).done(function () {
+        event.data.actionElement.empty();
+        inviteStatus.text("Rejected").css("color", "red");
+    })
 }

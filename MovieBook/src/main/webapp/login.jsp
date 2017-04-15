@@ -11,7 +11,7 @@
 <!-- Javascript Includes -->
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
-   
+<script src="js/index.js"></script>
 </head>
 
 <body>
@@ -143,7 +143,7 @@
 		}
 	%>
 	
-<script src="js/index.js"></script>
+
     
 </body>
 </html>
