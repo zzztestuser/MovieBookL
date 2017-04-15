@@ -575,13 +575,12 @@ function rejectEventButton(event) {
     arguments.event = $(this).data("event");
 
     $.ajax({
-        url : "api/events/invite",
+        url : "api/events/invite?event=" + arguments.event,
         type : "DELETE",
-        data : arguments,
         dataType : "json",
         cache : false
     }).done(function () {
         event.data.actionElement.empty();
-        inviteStatus.text("Rejected").css("color", "red");
+        event.data.inviteElement.text("Rejected").css("color", "red");
     })
 }
