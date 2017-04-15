@@ -378,7 +378,7 @@ function convertLocalDateTimeToString(dateTime) {
 
 function handleInviteAction() {
 
-    idT = $(this).data("movie");
+    var idT = $(this).data("movie");
     var inviteData = {};
 
     var clearStatusMessage = function (attachPoint) {
@@ -508,10 +508,22 @@ function updateInvites() {
                 newEvent.find("span.eventScreeningTime").text(convertLocalDateTimeToString(result.screeningDateTime));
                 newEvent.find("span.eventSentBy").text(result.createdByName);
 
+                var actionsArea = newEvent.find("div.eventItemAction");
+                actionsArea.empty();
+
                 var inviteStatus = newEvent.find("span.eventInviteStatus");
                 switch (status.toLowerCase()) {
                 case "sent":
-                    inviteStatus.text("Sent").css("color", "blue");
+                    var acceptButton = $("<button>", {
+                        "type" : "button",
+                        "text" : "Accept"
+                    });
+                    acceptButton.data("event", result.id);
+                    acceptButton.click({
+                        "actionElement" : actionsArea,
+                        "inviteElement" : inviteStatus
+                    }, acceptEventButton);
+                    actionsArea.append(acceptButton);
                     break;
                 case "accepted":
                     inviteStatus.text("Accepted").css("color", "green");
@@ -519,7 +531,7 @@ function updateInvites() {
                 case "rejected":
                     inviteStatus.text("Rejected").css("color", "red");
                     break;
-                    
+
                 }
 
                 eventListOverall.append(newEvent);
@@ -531,4 +543,21 @@ function updateInvites() {
 
     })
 
+}
+
+function acceptEventButton(event) {
+
+    var arguments = {};
+    arguments.event = $(this).data("event");
+
+    $.ajax({
+        url : "api/events/invite",
+        type : "POST",
+        data : arguments,
+        dataType : "json",
+        cache : false
+    }).done(function () {
+        event.data.actionElement.empty();
+        event.data.inviteElement.text("Accepted").css("color", "green");
+    })
 }

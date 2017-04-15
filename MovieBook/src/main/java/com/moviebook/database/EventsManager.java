@@ -215,12 +215,12 @@ public class EventsManager {
 				try (ResultSet rs = stmt.executeQuery()) {
 					while (rs.next()) {
 						AttendeeBean ab = new AttendeeBean();
-						
+
 						ab.setId(rs.getInt("userID"));
 						ab.setName(StringUtils.trim(rs.getString("name")));
 						ab.setStatus(InviteStatus.valueOf(rs.getInt("attendanceStatus")));
 						results.add(ab);
-						
+
 					}
 				}
 			}
@@ -228,6 +228,29 @@ public class EventsManager {
 
 		log.info(results.size() + " lightweight attendees retrieved for event " + eventID);
 		return results.isEmpty() ? null : results;
+	}
+
+	public static int updateAttendeeInviteStatus(int eventID, int userID, int status) throws SQLException  {
+		
+		final String sql = "UPDATE `event_attendees` SET `attendanceStatus`=? WHERE `eventID`=? AND `userID`=?";
+		
+		log.info("Updating invite status to " + status + " for event " + eventID + " and user " + userID);
+		try (Connection conn = DatabaseHelper.getDbConnection()) {
+
+			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+				stmt.setInt(1, status);
+				stmt.setInt(2, eventID);
+				stmt.setInt(3, status);
+
+				int rowsUpdated = stmt.executeUpdate();
+				
+				log.debug(rowsUpdated + " rows updated");
+				
+				return rowsUpdated;
+			}
+		}
+		
+
 	}
 
 }

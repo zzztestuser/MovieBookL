@@ -46,7 +46,8 @@
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Screening Time</span><span class="eventScreeningTime"></span><br />
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Sent By</span><span class="eventSentBy"></span><br />
 				<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Invite status</span><span class="eventInviteStatus"></span><br />
-
+			</div>
+			<div class="eventItemAction">
 			</div>
 		</div>
 
