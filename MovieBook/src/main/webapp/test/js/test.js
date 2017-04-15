@@ -514,16 +514,35 @@ function updateInvites() {
                 var inviteStatus = newEvent.find("span.eventInviteStatus");
                 switch (status.toLowerCase()) {
                 case "sent":
+                    var dataToBePassed = {
+                        "actionElement" : actionsArea,
+                        "inviteElement" : inviteStatus
+                    };
                     var acceptButton = $("<button>", {
                         "type" : "button",
                         "text" : "Accept"
+                    }).css({
+                        "margin-left" : "10px",
+                        "margin-right" : "10px"
                     });
                     acceptButton.data("event", result.id);
-                    acceptButton.click({
-                        "actionElement" : actionsArea,
-                        "inviteElement" : inviteStatus
-                    }, acceptEventButton);
+                    acceptButton.click(dataToBePassed, acceptEventButton);
+
+                    var rejectButton = $("<button>", {
+                        "type" : "button",
+                        "text" : "Reject",
+                    }).css({
+                        "margin-left" : "10px",
+                        "margin-right" : "10px"
+                    });
+
+                    rejectButton.data("event", result.id);
+                    rejectButton.click(dataToBePassed, rejectEventButton);
+                    
                     actionsArea.append(acceptButton);
+                    actionsArea.append(rejectButton);
+                    
+                    
                     break;
                 case "accepted":
                     inviteStatus.text("Accepted").css("color", "green");
@@ -535,6 +554,7 @@ function updateInvites() {
                 }
 
                 eventListOverall.append(newEvent);
+                
             })
 
         })
@@ -559,5 +579,22 @@ function acceptEventButton(event) {
     }).done(function () {
         event.data.actionElement.empty();
         event.data.inviteElement.text("Accepted").css("color", "green");
+    })
+}
+
+function rejectEventButton(event) {
+
+    var arguments = {};
+    arguments.event = $(this).data("event");
+
+    $.ajax({
+        url : "api/events/invite",
+        type : "DELETE",
+        data : arguments,
+        dataType : "json",
+        cache : false
+    }).done(function () {
+        event.data.actionElement.empty();
+        inviteStatus.text("Rejected").css("color", "red");
     })
 }
