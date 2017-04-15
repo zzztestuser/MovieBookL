@@ -273,7 +273,7 @@
 							</div>
 							<hr />
 							<div class="movieScreenings">
-								<strong>Screenings</strong>
+								<h3>Screenings</h3>
 								<div class="movieScreeningsList"></div>
 							</div>
 							<div class="inviteActions">
@@ -344,6 +344,25 @@
 <div class="recommendation">
 <div class="container_12">
 <div class="grid_12">
+
+<div class="eventsList">
+<h2>Invites</h2>
+<div class="eventItem">
+	<div class="eventItemDetails" >
+		<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Movie: </span><span class="eventMovieTitle"></span><br />
+		<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Location: </span><span class="eventMovieLocation"></span><br />
+		<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Screening Time: </span><span class="eventScreeningTime"></span><br />
+		<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Sent By: </span><span class="eventSentBy"></span><br />
+		<span style="font-weight: bold; display: inline-block; min-width: 100px; margin-right: 10px">Invite status: </span><span class="eventInviteStatus"></span><br /><br />	
+		</div>
+	<div class="eventItemAction">
+	</div>
+</div>
+	
+	
+</div>
+
+<div class="inviteActions"></div>
 
 <div class="friendsList"></div>
 
