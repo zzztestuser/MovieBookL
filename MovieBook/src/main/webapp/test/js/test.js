@@ -510,13 +510,14 @@ function updateInvites() {
 
                 var actionsArea = newEvent.find("div.eventItemAction");
                 actionsArea.empty();
-
+                var inviteLabel = newEvent.find("span.eventInviteLabel");
                 var inviteStatus = newEvent.find("span.eventInviteStatus");
                 switch (status.toLowerCase()) {
                 case "sent":
                     var dataToBePassed = {
                         "actionElement" : actionsArea,
-                        "inviteElement" : inviteStatus
+                        "inviteElement" : inviteStatus,
+                        "inviteLElement" : inviteLabel
                     };
                     var acceptButton = $("<button>", {
                         "type" : "button",
@@ -541,7 +542,7 @@ function updateInvites() {
                     
                     actionsArea.append(acceptButton);
                     actionsArea.append(rejectButton);
-                    
+                    inviteLabel.hide();
                     
                     break;
                 case "accepted":
@@ -578,6 +579,7 @@ function acceptEventButton(event) {
         cache : false
     }).done(function () {
         event.data.actionElement.empty();
+        event.data.inviteLElement.show();
         event.data.inviteElement.text("Accepted").css("color", "green");
     })
 }
@@ -594,6 +596,7 @@ function rejectEventButton(event) {
         cache : false
     }).done(function () {
         event.data.actionElement.empty();
+        event.data.inviteLElement.show();
         event.data.inviteElement.text("Rejected").css("color", "red");
     })
 }

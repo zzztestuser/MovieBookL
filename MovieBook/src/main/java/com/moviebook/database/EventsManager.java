@@ -240,7 +240,7 @@ public class EventsManager {
 			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, status);
 				stmt.setInt(2, eventID);
-				stmt.setInt(3, status);
+				stmt.setInt(3, userID);
 
 				int rowsUpdated = stmt.executeUpdate();
 				
